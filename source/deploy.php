@@ -4,7 +4,7 @@ $repoUrl = 'https://github.com/eduardobatista-ti/cdn-zipcloud.git';
 $deployDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/ziper';
 $tempDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/temp';
 $logFile = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/logs/deploy.log';
-$secret = 'seu-token-secreto'; // Defina um token secreto forte
+$secret = '1'; // Defina um token secreto forte
 
 // Função para logs
 function logMessage($message) {
