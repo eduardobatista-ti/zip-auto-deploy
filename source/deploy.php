@@ -44,14 +44,7 @@ if (!hash_equals($githubSignature, $signature)) {
 if (!hash_equals($githubSignature, $signature)) {
     http_response_code(403);
     logMessage('Forbidden: token inválido.');
-    exit('Forbidden');
-}
-
-// Verificar se outro deploy está em andamento ####################################################
-$lockFile = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/ziper' . '/deploy.lock';
-if (file_exists($lockFile)) {
-    logMessage('Deploy já está em andamento.');
-    exit('Deploy em andamento');
+    exit('Forbidden: Você não deveria estar aqui hehe');
 }
 
 logMessage('Iniciando o deploy');
