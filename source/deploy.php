@@ -3,7 +3,7 @@
 $deployScriptShell = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/source/deploy.sh';
 
 // Configurações do webhook do GitHub
-$githubSecret = 'seu_secret_aqui'; // Insira o segredo configurado no GitHub
+$githubSecret = '1'; // Insira o segredo configurado no GitHub
 $githubEvent = $_SERVER['HTTP_X_GITHUB_EVENT'];
 $githubDelivery = $_SERVER['HTTP_X_GITHUB_DELIVERY'];
 $githubSignature = $_SERVER['HTTP_X_HUB_SIGNATURE_256'];
