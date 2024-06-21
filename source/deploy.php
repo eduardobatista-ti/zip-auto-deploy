@@ -5,9 +5,9 @@ $deployDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/ziper';
 $tempDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/temp';
 $logDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/logs';
 $logFile = $logDir . '/deploy.log';
-$secret = 'seu-token-secreto'; // Defina um token secreto forte
+$secret = 'seu-token-secreto'; // Aqui tu pode definir o token que você vai configurar lá no webhook do GitHub
 
-// Função para logar mensagens
+// Função para logs
 function logMessage($message) {
     global $logFile;
     $timestamp = date("Y-m-d H:i:s");
@@ -42,7 +42,7 @@ if (!hash_equals($signature, $_SERVER['HTTP_X_HUB_SIGNATURE'])) {
     exit('Forbidden');
 }
 
-logMessage('Iniciando o desplante');
+logMessage('Iniciando o deploy');
 
 // Remover o diretório ziper antigo
 execCommand("rm -rf $deployDir");
