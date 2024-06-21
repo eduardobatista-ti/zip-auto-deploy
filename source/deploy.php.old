@@ -1,0 +1,133 @@
+<?php
+// Configurações
+$repoUrl = 'https://github.com/eduardobatista-ti/cdn-zipcloud.git';
+$deployDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/ziper';
+$tempDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/temp';
+$logDir = '/home/zipcloudbr/web/cdn.zipcloud.com.br/logs';
+$logFile = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/logs/deploy.log';
+$secret = '1';
+
+// Função para logs
+function logMessage($message) {
+    global $logFile;
+    $timestamp = date("Y-m-d H:i:s");
+    $logMessage = "[$timestamp] $message\n";
+    
+    // Abra o arquivo de log para escrita (append)
+    $logHandle = fopen($logFile, 'a');
+    if ($logHandle) {
+        fwrite($logHandle, $logMessage);
+        fclose($logHandle);
+    } else {
+        error_log("Não foi possível abrir o arquivo de log para escrita: $logFile");
+    }
+}
+
+// Teste simples de gravação de log
+logMessage('Início do script deploy.php');
+
+
+// Função para executar comandos e lidar com erros
+function execCommand($command) {
+    global $logFile;
+    $output = [];
+    $returnVar = 0;
+    exec($command . ' 2>&1', $output, $returnVar); // Captura STDERR também
+    logMessage("Executando comando: $command");
+    if ($returnVar !== 0) {
+        logMessage("Erro ao executar: $command");
+        foreach ($output as $line) {
+            logMessage($line);
+        }
+        return false; // Retorna false para indicar falha na execução do comando
+    }
+    foreach ($output as $line) {
+        logMessage($line);
+    }
+    return true; // Retorna true para indicar sucesso na execução do comando
+}
+
+
+// Verificar se o script foi chamado pelo GitHub com o token correto
+$payload = file_get_contents('php://input');
+$headerSignature = $_SERVER['HTTP_X_HUB_SIGNATURE'] ?? '';
+$signature = 'sha1=' . hash_hmac('sha1', $payload, $secret);
+
+if (!hash_equals($signature, $headerSignature)) {
+    http_response_code(403);
+    logMessage('Forbidden: token inválido.');
+    exit('Forbidden');
+}
+
+logMessage('Iniciando o deploy');
+
+// Verificar se outro deploy está em andamento
+$lockFile = $deployDir . '/deploy.lock';
+if (file_exists($lockFile)) {
+    logMessage('Deploy já está em andamento.');
+    exit('Deploy em andamento');
+}
+
+// Criar um arquivo de lock para evitar deploys simultâneos
+file_put_contents($lockFile, '');
+
+// Teste simples de gravação de log
+logMessage('Ponto de erro 1');
+
+// Backup do diretório ziper anterior
+$backupDir = $deployDir . '_backup_' . date('Ymd_His');
+if (is_dir($deployDir)) {
+    if (!execCommand("mv $deployDir $backupDir")) {
+        logMessage("Erro ao fazer backup do diretório ziper anterior.");
+        unlink($lockFile); // Remove o arquivo de lock
+        http_response_code(501);
+        exit('Erro durante o deploy. Verifique os logs para mais detalhes.');
+    }
+}
+
+// Teste simples de gravação de log
+logMessage('Ponto de erro 2');
+
+// Clonar o repositório no diretório temporário
+if (!execCommand("git clone $repoUrl $tempDir")) {
+    logMessage("Erro ao clonar o repositório Git.");
+    if (is_dir($backupDir)) {
+        // Restaurar backup do diretório ziper anterior se houver
+        execCommand("mv $backupDir $deployDir");
+    }
+    unlink($lockFile); // Remove o arquivo de lock
+    http_response_code(502);
+    exit('Erro durante o deploy. Verifique os logs para mais detalhes.');
+}
+
+// Teste simples de gravação de log
+logMessage('Ponto de erro 3');
+
+
+// Renomear o diretório clonado para ziper
+if (!execCommand("mv $tempDir $deployDir")) {
+    logMessage("Erro ao renomear o diretório clonado para ziper.");
+    if (is_dir($backupDir)) {
+        // Restaurar backup do diretório ziper anterior se houver
+        execCommand("mv $backupDir $deployDir");
+    }
+    unlink($lockFile); // Remove o arquivo de lock
+    http_response_code(503);
+    exit('Erro durante o deploy. Verifique os logs para mais detalhes.');
+}
+
+// Teste simples de gravação de log
+logMessage('Ponto de erro 4');
+
+// Limpeza: Remover o diretório temporário se ele ainda existir
+if (is_dir($tempDir)) {
+    execCommand("rm -rf $tempDir");
+}
+
+// Remover o arquivo de lock
+unlink($lockFile);
+
+logMessage('Deploy concluído com sucesso!');
+echo "Deploy concluído com sucesso!";
+?>
+
