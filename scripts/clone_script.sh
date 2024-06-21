@@ -1,2 +1,6 @@
 #!/bin/bash
-git clone $repoUrl $tempDir
+
+repoUrl="$1"
+tempDir="$2"
+
+git clone "$repoUrl" "$tempDir"
