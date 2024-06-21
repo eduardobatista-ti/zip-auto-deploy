@@ -9,7 +9,7 @@ GIT_REPO="https://github.com/eduardobatista-ti/cdn-zipcloud.git"
 # Diretório temporário para clonar o repositório
 TEMP_DIR="/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/temp_clone"
 
-LOCKFILE="/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/ziper/file.lock"
+LOCKFILE="$TARGET_DIR/file.lock"
 
 # Verificação de lockfile
 if [ -f "$LOCKFILE" ]; then
