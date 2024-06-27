@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Definir valores padrão para os parâmetros removidos
     $tempDir = __DIR__  . '/temp_clone';
-    $logFile = __DIR__  . '/logs/deploy.log';
+    $logFile = __DIR__  . '/logs-zip/deploy.log';
     $lockFile = __DIR__  . '/deploy.lock';
 
     // Criar o conteúdo do arquivo de configuração
@@ -37,10 +37,10 @@ EOL;
     // Mostrar o formulário de configuração
     echo '<form method="POST" action="">
         <label for="repo_url">URL do Repositório:</label><br>
-        <input type="text" id="repo_url" name="repo_url" required><br><br>
+        <input type="text" class="form-zip" id="repo_url" name="repo_url" required><br><br>
         
         <label for="webhook_secret">Secret do Webhook:</label><br>
-        <input type="text" id="webhook_secret" name="webhook_secret" required><br><br>
+        <input type="text" class="form-zip" id="webhook_secret" name="webhook_secret" required><br><br>
         
         <input type="submit" value="Salvar Configuração">
     </form>';

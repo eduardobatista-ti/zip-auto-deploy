@@ -1,7 +1,10 @@
 #!/bin/bash
 
-# Carregar as configurações do arquivo PHP
-source <(php -r 'include __DIR__ . "/deploy-config.php"; foreach ($config as $key => $value) { echo "$key=\"$value\"\n"; }')
+# Obter o diretório raiz do script atual
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Carregar as configurações do arquivo PHP na pasta raiz
+source <(php -r "include '$ROOT_DIR/deploy-config.php'; foreach (\$config as \$key => \$value) { echo \"\$key=\\\"\$value\\\"\n\"; }")
 
 # Diretório de destino
 TARGET_DIR="$target_dir"
@@ -12,23 +15,11 @@ GIT_REPO="$repo_url"
 # Diretório temporário para clonar o repositório
 TEMP_DIR="$temp_dir"
 
-# Arquivo de lock
-LOCKFILE="$lock_file"
-
-# Verificação de lockfile
-if [ -f "$LOCKFILE" ]; então
-    echo "Processo já em execução. Saindo."
-    exit 1
-fi
-
-# Cria o arquivo de lock
-touch $LOCKFILE
-
 # Lista de exceções - arquivos e diretórios que não devem ser removidos ou sobrepostos
 EXCEPTION_ITEMS=(
-    "assets"
-    "logs"
-    "source" # Inclui a pasta source inteira
+    "assets-zip"
+    "logs-zip"
+    "source-zip" 
     "content.html"
     "deploy-setup.php"
     "deploy-config.php"
@@ -38,7 +29,7 @@ EXCEPTION_ITEMS=(
 is_exception() {
     local item=$1
     for exception in "${EXCEPTION_ITEMS[@]}"; do
-        if [[ "$item" == "$exception" || "$item" == "$exception/"* ]]; então
+        if [[ "$item" == "$exception" || "$item" == "$exception/"* ]]; then
             return 0
         fi
     done
@@ -46,11 +37,11 @@ is_exception() {
 }
 
 # Verifica se o diretório de destino existe e remove seu conteúdo, exceto os itens na lista de exceções
-if [ -d "$TARGET_DIR" ]; então
+if [ -d "$TARGET_DIR" ]; then
     echo "Limpando o diretório de destino: $TARGET_DIR"
     for item in "$TARGET_DIR"/*; do
         item_name=$(basename "$item")
-        if ! is_exception "$item_name"; então
+        if ! is_exception "$item_name"; then
             echo "Removendo $item_name"
             rm -rf "$item"
         else
@@ -65,9 +56,9 @@ git clone "$GIT_REPO" "$TEMP_DIR"
 
 # Move o conteúdo clonado para o diretório de destino, exceto os itens na lista de exceções
 echo "Movendo conteúdo clonado para: $TARGET_DIR"
-for item in "$TEMP_DIR"/*; então
+for item in "$TEMP_DIR"/*; do
     item_name=$(basename "$item")
-    if ! is_exception "$item_name"; então
+    if ! is_exception "$item_name"; then
         echo "Movendo $item_name"
         mv "$item" "$TARGET_DIR/"
     else
@@ -78,8 +69,5 @@ done
 
 # Limpeza do diretório temporário
 rm -rf "$TEMP_DIR"
-
-# Remover o arquivo de lock
-rm "$LOCKFILE"
 
 echo "Deploy concluído com sucesso!"

@@ -1,10 +1,23 @@
 <?php
+// Depuração: Verificar caminho absoluto
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Incluir o arquivo de configuração
-include __DIR__ . '/deploy-config.php';
+
+include dirname(__DIR__) . '/deploy-config.php';
+
+// Verificar se $config foi definido corretamente
+if (!isset($config)) {
+    die("Erro: arquivo de configuração não carregado corretamente.");
+}
 
 // Utilizar as configurações do arquivo
-$deployScriptShell = __DIR__ . '/source/deploy.sh';
-$logFile = $config['/logs/log_file'];
+
+// Utilizar as configurações do arquivo
+$deployScriptShell = dirname(__DIR__) . '/source/deploy.sh';
+$logFile = $config['log_file'];
 $githubSecret = $config['webhook_secret'];
 
 // Função para mensagens de log
@@ -12,7 +25,7 @@ function logMessage($message) {
     global $logFile;
     $timestamp = date("Y-m-d H:i:s");
     $logMessage = "[$timestamp] $message\n";
-    
+
     $logHandle = fopen($logFile, 'a');
     if ($logHandle) {
         fwrite($logHandle, $logMessage);
@@ -21,6 +34,8 @@ function logMessage($message) {
         error_log("Não foi possível abrir o arquivo de log para escrita: $logFile");
     }
 }
+
+logMessage('Iniciando o deploy');
 
 // Receber o payload do GitHub
 $payload = file_get_contents('php://input');
