@@ -1,23 +1,18 @@
 <?php
-// Caminho para o script shell de deploy
-$deployScriptShell = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/source/deploy.sh';
+// Incluir o arquivo de configuração
+include __DIR__ . '/deploy-config.php';
 
-//diretorio de log
-$logFile = '/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/logs/deploy.log';
+// Utilizar as configurações do arquivo
+$deployScriptShell = __DIR__ . '/source/deploy.sh';
+$logFile = $config['/logs/log_file'];
+$githubSecret = $config['webhook_secret'];
 
-// Configurações do webhook do GitHub
-$githubSecret = '1'; //insira a secret que está no webhook do github
-$githubEvent = $_SERVER['HTTP_X_GITHUB_EVENT'];
-$githubDelivery = $_SERVER['HTTP_X_GITHUB_DELIVERY'];
-$githubSignature = $_SERVER['HTTP_X_HUB_SIGNATURE_256'];
-
-//mensagens de log
+// Função para mensagens de log
 function logMessage($message) {
     global $logFile;
     $timestamp = date("Y-m-d H:i:s");
     $logMessage = "[$timestamp] $message\n";
     
-    // Abra o arquivo de log para escrita (append)
     $logHandle = fopen($logFile, 'a');
     if ($logHandle) {
         fwrite($logHandle, $logMessage);
@@ -29,17 +24,12 @@ function logMessage($message) {
 
 // Receber o payload do GitHub
 $payload = file_get_contents('php://input');
+$githubEvent = $_SERVER['HTTP_X_GITHUB_EVENT'];
+$githubDelivery = $_SERVER['HTTP_X_GITHUB_DELIVERY'];
+$githubSignature = $_SERVER['HTTP_X_HUB_SIGNATURE_256'];
 
 // Verificação da assinatura HMAC
 $signature = 'sha256=' . hash_hmac('sha256', $payload, $githubSecret);
-
-/*
-// Comparação segura para evitar timing attacks
-if (!hash_equals($githubSignature, $signature)) {
-    header('HTTP/1.1 403 Forbidden');
-    die("Assinatura inválida.");
-}
-*/
 
 if (!hash_equals($githubSignature, $signature)) {
     http_response_code(403);
@@ -49,8 +39,8 @@ if (!hash_equals($githubSignature, $signature)) {
 
 logMessage('Iniciando o deploy');
 
-// Criar um arquivo de lock para evitar deploys simultâneos ##################################
-file_put_contents($lockFile, '');
+// Criar um arquivo de lock para evitar deploys simultâneos
+file_put_contents($config['lock_file'], '');
 
 // Verifica se o evento é um push
 if ($githubEvent == 'push') {
@@ -58,14 +48,13 @@ if ($githubEvent == 'push') {
     $output = shell_exec("bash $deployScriptShell 2>&1");
     
     // Log da execução do deploy
-    file_put_contents('/home/zipcloudbr/web/cdn.zipcloud.com.br/public_html/logs/deploy.log', "[" . date('Y-m-d H:i:s') . "] Resultado do deploy:\n$output\n\n", FILE_APPEND);
+    file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] Resultado do deploy:\n$output\n\n", FILE_APPEND);
 
     echo "Deploy executado com sucesso!";
 } else {
     echo "Evento ignorado: $githubEvent";
 }
 
-// Remover o arquivo de lock #######################
-unlink($lockFile);
-
+// Remover o arquivo de lock
+unlink($config['lock_file']);
 ?>
