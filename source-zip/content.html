@@ -7,11 +7,51 @@
             Faça o deploy do seu projeto no GitHub no seu servidor! A cada Git Push, o servidor atualiza automaticamente. Aproveite esse projeto desenvolvido por <b><a href="">Eduardo Batista</a></b> e mantido pela <b><a href="">ZipCloud</a></b> 
         </h4>
         <div>
-            <button type="button" class="btn btn-secondary"><a href="/deploy-setup.php">Iniciar Configuração</a></button>
-            <button type="button" class="btn btn-primary"><a href="/deploy-setup.php">Testar execução</a></button>
+            <button type="button" class="btn btn-secondary" ><a href="/deploy-setup.php">Iniciar Configuração</a></button>
+            <button type="button" onclick="testShellExec()" class="btn btn-primary" ><a >Testar execução</a></button>
+            <button type="button" onclick="testGit()" class="btn btn-primary" ><a >Testar Git</a></button>
         </div>
     </div>
     <div>
         <img src="/assets-zip/final-bg.png" id="bg-right" alt="">
     </div>
+
+    
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="testToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <strong class="me-auto">Resultado do Teste</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body" id="toastBody">
+                    <!-- O resultado será exibido aqui -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        function showToast(content) {
+            document.getElementById('toastBody').innerHTML = `<pre>${content}</pre>`;
+            var toast = new bootstrap.Toast(document.getElementById('testToast'));
+            toast.show();
+        }
+
+        function testShellExec() {
+            fetch('/source-zip/test.php?type=shell_exec')
+                .then(response => response.text())
+                .then(data => showToast(data))
+                .catch(error => showToast("Erro ao fazer a solicitação: " + error));
+        }
+
+        function testGit() {
+            fetch('/source-zip/test.php?type=git')
+                .then(response => response.text())
+                .then(data => showToast(data))
+                .catch(error => showToast("Erro ao fazer a solicitação: " + error));
+        }
+    </script>
 </section>

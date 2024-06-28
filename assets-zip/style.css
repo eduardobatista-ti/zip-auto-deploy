@@ -1,9 +1,5 @@
 
 *{
-    margin: 0;
-    padding: 0;
-    border: none;
-    border-style: none;
     font-family: "Poppins", sans-serif;
 }
   
@@ -18,29 +14,16 @@ p {
     font-size: 12px;
 }
 
-h1{
-    font-size: 40px;
-}
-
 h2{
     font-size: 32px;
     color: #fff;
     font-weight: 600;
 }
 
-h3{
-    font-size: 24px;
-}
-
 h4, h5, h6 {
     font-size: 18px;
     color: #d7d7d7;
     font-weight: 200;
-}
-
-.container{
-    width: 100%;
-    padding: 50px 0;
 }
 
 .flex-right{
@@ -50,14 +33,12 @@ h4, h5, h6 {
 
 #config{
     width: 50%;
-    padding-top: 150px;
+    padding-top: 130px;
 }
 
 #bg-right{
     width: 600px;
 }
-
-
 
 nav{
     display: flex;
@@ -97,17 +78,15 @@ li{
     width: 100%;
     display: flex;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.048); /* Transparência */
-    backdrop-filter: blur(20px); /* Efeito de blur */
+    background: rgba(255, 255, 255, 0.048); 
+    backdrop-filter: blur(20px); 
     padding: 1em;
     z-index: 1000;
     padding: 15px 5px;    
 }
 
 body{
-   /* background: linear-gradient(0deg, #000, #11001d); */
-   background: #0e0914;
-    
+   background: #0e0914;    
 }
 
 .form-control{
@@ -124,18 +103,12 @@ body{
 }
 
 .btn-primary {
-    --bs-btn-color: #fff;
     --bs-btn-bg: #79367d;
     --bs-btn-border-color: #79367d;
-    --bs-btn-hover-color: #fff;
     --bs-btn-hover-bg: #8c3b91;
     --bs-btn-hover-border-color: #8c3b91;
-    --bs-btn-focus-shadow-rgb: 130, 138, 145;
-    --bs-btn-active-color: #fff;
     --bs-btn-active-bg: #8c3b91;
     --bs-btn-active-border-color: #8c3b91;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: #79367d;
     --bs-btn-disabled-border-color: #79367d;
 }
