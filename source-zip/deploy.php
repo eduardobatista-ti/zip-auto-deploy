@@ -15,7 +15,7 @@ if (!isset($config)) {
 
 
 // Utilizar as configurações do arquivo
-$deployScriptShell = dirname(__DIR__) . '/source/deploy.sh';
+$deployScriptShell = dirname(__DIR__) . '/source-zip/deploy.sh';
 $logFile = $config['log_file'];
 $githubSecret = $config['webhook_secret'];
 
