@@ -16,8 +16,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets-zip/style.css">
+    <script src="/source-zip/scripts.js"></script>
 </head>
 <body>
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="testToast" class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body" id="toastBody">
+                        <!-- resultado aqui -->
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <header>
     <div>
         <?php include __DIR__ . '/source-zip/header.html'; ?>
@@ -71,7 +86,8 @@ EOL;
         <label for="webhook_secret" class="form-label">Secret do Webhook:</label><br>
         <input type="text" class="form-control" id="webhook_secret" name="webhook_secret" required><br>
         
-        <input type="submit" class="btn btn-primary" value="Salvar Configuração">
+        <input type="submit" class="btn btn-primary" value="Salvar Configuração"> 
+        <button type="button" onclick="copyUrl()" class="btn btn-secondary" ><a >Copiar Payload URL</a></button>
     </form>';
 }
 ?>
