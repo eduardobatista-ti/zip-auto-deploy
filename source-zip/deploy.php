@@ -13,7 +13,6 @@ if (!isset($config)) {
     die("Erro: arquivo de configuração não carregado corretamente.");
 }
 
-// Utilizar as configurações do arquivo
 
 // Utilizar as configurações do arquivo
 $deployScriptShell = dirname(__DIR__) . '/source/deploy.sh';
@@ -35,7 +34,6 @@ function logMessage($message) {
     }
 }
 
-logMessage('Iniciando o deploy');
 
 // Receber o payload do GitHub
 $payload = file_get_contents('php://input');
@@ -54,9 +52,6 @@ if (!hash_equals($githubSignature, $signature)) {
 
 logMessage('Iniciando o deploy');
 
-// Criar um arquivo de lock para evitar deploys simultâneos
-file_put_contents($config['lock_file'], '');
-
 // Verifica se o evento é um push
 if ($githubEvent == 'push') {
     // Executa o script shell de deploy
@@ -70,6 +65,4 @@ if ($githubEvent == 'push') {
     echo "Evento ignorado: $githubEvent";
 }
 
-// Remover o arquivo de lock
-unlink($config['lock_file']);
 ?>
