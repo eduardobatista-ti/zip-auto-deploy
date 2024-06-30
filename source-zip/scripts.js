@@ -38,9 +38,31 @@ function copyUrl() {
     });
 }
 
+
 function deployNow() {
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "/source-zip/setup-deploy.php", true);  // Envia a solicitação para o próprio arquivo PHP
+    xhr.open("POST", "/manual-deploy.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                document.getElementById("toastBody").innerHTML = xhr.responseText;
+            } else {
+                document.getElementById("toastBody").innerHTML = "Erro: " + xhr.status + " - " + xhr.statusText;
+            }
+            const toastElement = document.getElementById('testToast');
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        }
+    };
+    xhr.send("deploy=true");
+}
+
+
+/*
+function deployNow() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/source-zip/deploy.php", true);  // Envia a solicitação para o próprio arquivo PHP
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechange = function () {
@@ -50,4 +72,4 @@ function deployNow() {
     };
     xhr.send("deploy=true"); // Envia um parâmetro para indicar a ação de deploy
 }
-
+*/
