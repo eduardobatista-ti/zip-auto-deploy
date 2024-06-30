@@ -37,3 +37,16 @@ function copyUrl() {
         console.error('Erro ao copiar Payload URL: ', err);
     });
 }
+
+function deployNow() {
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/source-zip/setup-deploy.php", true);  // Envia a solicitação para o próprio arquivo PHP
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            document.getElementById("deploy-result").innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send("deploy=true"); // Envia um parâmetro para indicar a ação de deploy
+}

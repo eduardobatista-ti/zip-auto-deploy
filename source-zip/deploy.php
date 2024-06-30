@@ -65,4 +65,29 @@ if ($githubEvent == 'push') {
     echo "Evento ignorado: $githubEvent";
 }
 
+// Verifica se é uma solicitação de deploy via AJAX
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deploy'])) {
+    // Log inicial
+    logMessage('Iniciando o deploy manual.');
+
+    // Verifica se o script de deploy existe
+    if (!file_exists($deployScriptShell)) {
+        echo "Erro: O script de deploy não foi encontrado.";
+        logMessage('Erro: O script de deploy não foi encontrado.');
+        exit;
+    }
+
+    // Executa o script shell de deploy
+    $output = shell_exec("bash $deployScriptShell 2>&1");
+    
+    // Log da execução do deploy
+    logMessage("Resultado do deploy:\n$output");
+
+    // Exibe a mensagem de sucesso e o resultado do deploy
+    echo "Deploy executado com sucesso!<br>";
+    echo nl2br($output); // nl2br para preservar as quebras de linha na saída
+    exit;
+}
+
+
 ?>

@@ -73,7 +73,12 @@ EOL;
 
     // salvar as configurações no arquivo
     if (file_put_contents($configFile, $configContent)) {
-        echo "<h2>Configuração salva com sucesso!</h2> <br> <h4>Verifique o arquivo <code>deploy-config.php</code> na raiz do projeto.</h4>";
+        echo '<h2>Configuração salva com sucesso!</h2> <br> <h4>Verifique o arquivo <code>deploy-config.php</code> na raiz do projeto.</h4>
+        <div>
+            <button type="button" class="btn btn-secondary"><a href="/">Aguardar Push</a></button>
+            <button type="button" onclick="deployNow()" class="btn btn-primary"><a>Deploy agora</a></button>
+        </div>';
+        
     } else {
         echo "Erro ao salvar a configuração.";
     }
