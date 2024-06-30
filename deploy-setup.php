@@ -64,7 +64,6 @@
     'target_dir' => '$targetDir',
     'temp_dir' => '$tempDir',
     'log_file' => '$logFile',
-    'lock_file' => '$lockFile',
 ];
 EOL;
 
@@ -92,7 +91,7 @@ EOL;
         <input type="text" class="form-control" id="webhook_secret" name="webhook_secret" required><br>
         
         <input type="submit" class="btn btn-primary" value="Salvar Configuração"> 
-        <button type="button" onclick="copyUrl()" class="btn btn-secondary" ><a >Copiar Payload URL</a></button>
+        <button type="button" onclick="copyUrl()" class="btn btn-secondary" ><a>Copiar Payload URL</a></button>
     </form>';
 }
 ?>
