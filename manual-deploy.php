@@ -71,4 +71,6 @@ function manualDeploy() {
     exit;
 }
 
+manualDeploy();
+
 ?>
