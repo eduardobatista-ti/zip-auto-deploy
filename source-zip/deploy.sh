@@ -6,6 +6,9 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Carregar as configurações do arquivo PHP na pasta raiz
 source <(php -r "include '$ROOT_DIR/deploy-config.php'; foreach (\$config as \$key => \$value) { echo \"\$key=\\\"\$value\\\"\n\"; }")
 
+#Lockfile
+LOCKFILE="$target_dir/deploy.lock"
+
 # Diretório de destino
 TARGET_DIR="$target_dir"
 
@@ -67,5 +70,10 @@ done
 
 # Limpeza do diretório temporário
 rm -rf "$TEMP_DIR"
+
+#removendo lockfile
+
+rm -rf $LOCKFILE
+echo "Lockfile removido com sucesso!"
 
 echo "Deploy concluído com sucesso!"

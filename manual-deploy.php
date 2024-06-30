@@ -3,16 +3,24 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Incluir o arquivo de configuração
-include dirname(__DIR__) . '/deploy-config.php';
+//criação do LockFile
+$lockFile = __DIR__ .'/deploy.lock';
+
+// Incluir o arquivo de configuração de forma segura
+$configFile = __DIR__ . '/deploy-config.php';
+if (file_exists($configFile)) {
+    include $configFile;
+} else {
+    die("Erro: arquivo de configuração não encontrado.");
+}
 
 // Verificar se $config foi definido corretamente
-if (!isset($config)) {
+if (!isset($config) || !is_array($config)) {
     die("Erro: arquivo de configuração não carregado corretamente.");
 }
 
 // Utilizar as configurações do arquivo
-$deployScriptShell = dirname(__DIR__) . '/source-zip/deploy.sh';
+$deployScriptShell = __DIR__ . '/source-zip/deploy.sh';
 $logFile = $config['log_file'];
 
 // Função para mensagens de log
@@ -30,16 +38,36 @@ function logMessage($message) {
     }
 }
 
+// Verificar se o arquivo de lock já existe
+if (file_exists($lockFile)) {
+    logMessage("Já existe um deploy em andamento. Aguarde e tente novamente mais tarde.");
+    die("Já existe um deploy em andamento. Aguarde e tente novamente mais tarde.");
+}
+
+// Criar o arquivo de lock
+$lockHandle = fopen($lockFile, 'w');
+    
+if ($lockHandle === false || !flock($lockHandle, LOCK_EX | LOCK_NB)) {
+logMessage("Não foi possível criar ou bloquear o arquivo de lock. Verifique as permissões.");
+die("Não foi possível criar ou bloquear o arquivo de lock. Verifique as permissões.");
+}
+
 // Função para execução manual do deploy
 function manualDeploy() {
-    global $deployScriptShell;
-    $output = shell_exec("bash $deployScriptShell 2>&1");
+
+    
+    global $deployScriptShell, $logFile;
+    $output = shell_exec("bash " . escapeshellarg($deployScriptShell) . " 2>&1");
 
     // Log da execução do deploy
-    logMessage("Resultado do deploy:\n$output");
-
-    // Exibe a mensagem de sucesso e o resultado do deploy
-    echo "Deploy executado com sucesso!<br>";
+    if ($output === null) {
+        logMessage("Erro ao executar o script de deploy.");
+        echo "Erro ao executar o deploy. Verifique o log para mais informações.";
+    } else {
+        logMessage("Resultado do deploy:\n$output");
+        echo "Deploy executado com sucesso!<br>";
+        echo nl2br($output); // Exibe o resultado do deploy
+    }
     exit;
 }
 
