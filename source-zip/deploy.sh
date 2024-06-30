@@ -17,12 +17,10 @@ TEMP_DIR="$temp_dir"
 
 # Lista de exceções - arquivos e diretórios que não devem ser removidos ou sobrepostos
 EXCEPTION_ITEMS=(
-    "assets-zip"
     "logs-zip"
     "source-zip" 
-    "content.html"
-    "deploy-setup.php"
     "deploy-config.php"
+    ".env"
 )
 
 # Função para checar se um item está na lista de exceções
