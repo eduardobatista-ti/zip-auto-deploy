@@ -1,6 +1,4 @@
-<?php
-// Sistema de deploy automático
-?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -19,6 +17,11 @@
     <div>
         <?php include __DIR__ . '/source-zip/header.html'; ?>
     </header>
+    <?php 
+    $configFilePath = __DIR__ . '/deploy-config.php';
+    $fileExists = file_exists($configFilePath);
+    
+    ?>
     </div>
     <main>
     <div class="box" id="section-1">

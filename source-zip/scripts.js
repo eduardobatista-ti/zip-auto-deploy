@@ -50,3 +50,4 @@ function deployNow() {
     };
     xhr.send("deploy=true"); // Envia um parâmetro para indicar a ação de deploy
 }
+
