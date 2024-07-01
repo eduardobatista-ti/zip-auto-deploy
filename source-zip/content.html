@@ -17,7 +17,7 @@
 
             <!--Botão de deploy-->
             <?php if ($fileExists): ?>
-            <button type="button" onclick="deployNow()" class="btn btn-primary"><a>Deploy agora</a></button>
+            <button type="button" onclick="ToastDeployView(), deployNow()" class="btn btn-primary"><a>Deploy agora</a></button>
             <button type="button" class="btn btn-primary"><a href="/deploy-setup.php">Set</a></button>
             <?php endif; ?>
             <!--Botões de teste-->
@@ -36,6 +36,18 @@
                 <div class="d-flex">
                     <div class="toast-body" id="toastBody">
                         <!-- resultado aqui -->
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="testToast-code" class="toast toast-code align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body toast-body-code" id="toastBody-code">
+                <!-- resultado aqui -->
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>

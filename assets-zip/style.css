@@ -92,7 +92,18 @@ body{
 
 .toast {
     background-color: #79367d !important;
-    color: white;
+    color: #fff;
+}
+
+.toast-code {
+    background-color: #000 !important;
+    color: #fff;
+    
+}
+
+.toast-body-code {
+    max-height: 400px; /* Define a altura máxima da área rolável */
+    overflow-y: auto; 
 }
 
 .form-control{

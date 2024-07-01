@@ -20,7 +20,7 @@ if (!isset($config) || !is_array($config)) {
 }
 
 // Utilizar as configurações do arquivo
-$deployScriptShell = __DIR__ . '/source-zip/deploy.sh';
+$deployScriptShell = __DIR__ . '/auto-deploy/deploy.sh';
 $logFile = $config['log_file'];
 
 // Função para mensagens de log
