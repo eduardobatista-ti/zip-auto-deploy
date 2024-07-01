@@ -46,18 +46,27 @@ function deployNow() {
         .catch(error => showToast("Erro ao fazer a solicitação: " + error));
 }
 
+function copySecret() {
+    // Captura o valor do campo webhook_secret
+    var secretValue = document.getElementById('webhook_secret').value;
 
-/*
-function deployNow() {
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "/source-zip/deploy.php", true);  // Envia a solicitação para o próprio arquivo PHP
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    // Cria um elemento temporário de input para facilitar a cópia
+    var tempInput = document.createElement('input');
+    tempInput.value = secretValue;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
 
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            document.getElementById("deploy-result").innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send("deploy=true"); // Envia um parâmetro para indicar a ação de deploy
+    // Alerta ao usuário que a secret foi copiada (opcional)
+    alert('Webhook Secret copiado para a área de transferência!');
 }
-*/
+
+function copySecretShow(){
+        
+    const Content = `Sua secret foi copiada`;
+
+        document.getElementById('toastBody').textContent = '${Content}';
+
+        showToast('dasdadasd');
+}

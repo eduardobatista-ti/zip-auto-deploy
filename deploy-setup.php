@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zip AutoDeploy</title>
+    <title>Configurações</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,22 +73,29 @@ EOL;
     // salvar as configurações no arquivo
     if (file_put_contents($configFile, $configContent)) {
         echo '<h2>Configuração salva com sucesso!</h2> <br> <h4>Verifique o arquivo <code>deploy-config.php</code> na raiz do projeto.</h4>
+        <h4>Webhook Secret: <span id="secret" style="color: green;">' . htmlspecialchars($webhookSecret) . '</span></h4><br>
+        <span><script>copySecretShow();</script></span>
         <div>
-            <button type="button" class="btn btn-secondary"><a href="/">Aguardar Push</a></button>
             <button type="button" onclick="deployNow()" class="btn btn-primary"><a>Deploy agora</a></button>
+            <button type="button" class="btn btn-secondary"><a href="/">Aguardar Push</a></button>
+            <button type="button" onclick="copyUrl()" class="btn btn-secondary" ><a>Copiar Payload URL</a></button>
         </div>';
         
     } else {
         echo "Erro ao salvar a configuração.";
     }
 } else {
+    // gerar um webhook_secret randômico
+    $randomSecret = bin2hex(random_bytes(16));
+    
     // formulário de configurações
-    echo '<form method="POST" action="">
+    echo '<form method="POST" action="" onsubmit="copySecret()">
         <label for="repo_url" class="form-label">URL do Repositório:</label><br>
-        <input type="text" class="form-control" id="repo_url" name="repo_url" required><br>
+        <input type="text" class="form-control" id="repo_url" name="repo_url" required>
         
-        <label for="webhook_secret" class="form-label">Secret do Webhook:</label><br>
-        <input type="text" class="form-control" id="webhook_secret" name="webhook_secret" required><br>
+        <input type="hidden" id="webhook_secret" name="webhook_secret" value="' . $randomSecret . '"><br>
+        <label for="webhook_secret" class="form-label">Webhook Secret gerada:</label><br>
+        <span id="secret" style="color: green;">' . htmlspecialchars($randomSecret) . '</span><br><br>
         
         <input type="submit" class="btn btn-primary" value="Salvar Configuração"> 
         <button type="button" onclick="copyUrl()" class="btn btn-secondary" ><a>Copiar Payload URL</a></button>

@@ -12,17 +12,17 @@
             <!--Botão de setup-->
 
             <?php if (!$fileExists): ?>
-            <button type="button" class="btn btn-secondary"><a href="/deploy-setup.php">Iniciar Configuração</a></button>
+            <button type="button" class="btn btn-primary"><a href="/deploy-setup.php">Iniciar Configuração</a></button>
             <?php endif; ?>
 
             <!--Botão de deploy-->
             <?php if ($fileExists): ?>
-            <button type="button" onclick="deployNow()" class="btn btn-secondary"><a>Deploy agora</a></button>
-            <button type="button" class="btn btn-secondary"><a href="/deploy-setup.php">Set</a></button>
+            <button type="button" onclick="deployNow()" class="btn btn-primary"><a>Deploy agora</a></button>
+            <button type="button" class="btn btn-primary"><a href="/deploy-setup.php">Set</a></button>
             <?php endif; ?>
             <!--Botões de teste-->
-            <button type="button" onclick="testShellExec()" class="btn btn-primary" ><a >Testar execução</a></button>
-            <button type="button" onclick="testGit()" class="btn btn-primary" ><a >Testar Git</a></button>
+            <button type="button" onclick="testShellExec()" class="btn btn-secondary" ><a >Testar execução</a></button>
+            <button type="button" onclick="testGit()" class="btn btn-secondary" ><a >Testar Git</a></button>
         
         </div>
     </div>
