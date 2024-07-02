@@ -15,7 +15,7 @@ p {
 }
 
 h2{
-    font-size: 32px;
+    font-size: 28px;
     color: #fff;
     font-weight: 600;
 }
@@ -34,7 +34,14 @@ h4, h5, h6 {
 
 #config{
     width: 50%;
-    padding-top: 130px;
+    padding-top: 100px;
+    padding-bottom: 70px;
+}
+
+#config-setup{
+    width: 50%;
+    padding-top: 100px;
+    padding-bottom: 70px;
 }
 
 #bg-right{
@@ -60,12 +67,6 @@ ul{
 
 li{
     margin: 0 15px;
-    
-}
-
-.box {
-    width: 1140px;
-    margin: 0 auto;
     
 }
 
@@ -119,6 +120,35 @@ body{
     box-shadow: 0 0 0 .25rem rgb(138 13 253 / 25%);
 }
 
+.copy-secret {
+    position: relative;
+    cursor: pointer;
+    color: greenyellow;
+}
+
+.copy-secret::after {
+    content: "Copiar Webhook Secret";
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background-color: #79367d;
+    color: #fff;
+    font-size: 14px;
+    border-radius: 5px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 99999;
+}
+
+.copy-secret:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
 .btn-primary {
     --bs-btn-bg: #79367d;
     --bs-btn-border-color: #79367d;
@@ -128,4 +158,13 @@ body{
     --bs-btn-active-border-color: #8c3b91;
     --bs-btn-disabled-bg: #79367d;
     --bs-btn-disabled-border-color: #79367d;
+}
+
+.accordion{
+    --bs-accordion-bg: #0e0914;
+    --bs-accordion-color: #d7d7d7;
+    --bs-accordion-btn-color: #4e4e4e;
+    --bs-accordion-active-bg: #79367d;
+    --bs-accordion-active-color: #fff;
+    --bs-accordion-btn-focus-box-shadow: none;
 }

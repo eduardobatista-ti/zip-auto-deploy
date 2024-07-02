@@ -25,7 +25,7 @@
     ?>
     </div>
     <main>
-    <div class="box" id="section-1">
+    <div  id="section-1">
         <?php include __DIR__ . '/source-zip/content.html'; ?>
     </div>
     </main>

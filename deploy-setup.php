@@ -1,6 +1,3 @@
-
-
-
 <?php
 // Sistema de deploy automático
 ?>
@@ -38,9 +35,10 @@
     <div aria-live="polite" aria-atomic="true" class="position-relative">
         <div class="toast-container position-fixed bottom-0 end-0 p-3">
             <div id="testToast-code" class="toast toast-code align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <span style="padding: 10px;"><b>Execução do deploy:</b></span>
                 <div class="d-flex">
                     <div class="toast-body toast-body-code" id="toastBody-code">
-                    Suas configurações foram salvas, você já pode fazer o deploy manual ou aguardar um evento de Push (depois de criar e configurar o webhook no GitHub)   <!-- resultado aqui -->
+                      <!-- resultado aqui -->
                     </div>
                     <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
                 </div>
@@ -56,80 +54,83 @@
     </header>
     </div>
     <main>
-    <section class="box flex-right global" id="section-1">
-    <div id="config">
-        
-        <?php
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // dados que vou receber do formulário
-    $repoUrl = $_POST['repo_url'];
-    $webhookSecret = $_POST['webhook_secret'];
-    $targetDir = __DIR__;
+        <section class="container flex-right global" id="section-1">
+        <div id="config-setup">
+            
+            <?php
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // dados que vou receber do formulário
+        $repoUrl = $_POST['repo_url'];
+        $webhookSecret = $_POST['webhook_secret'];
+        $targetDir = __DIR__;
 
-    // definir valores padrão para os parâmetros removidos
-    $tempDir = __DIR__  . '/temp_clone';
-    $logFile = __DIR__  . '/logs-zip/deploy.log';
+        // definir valores padrão para os parâmetros removidos
+        $tempDir = __DIR__  . '/temp_clone';
+        $logFile = __DIR__  . '/logs-zip/deploy.log';
 
-    // aqui crio o arquivo de configurações
-    $configContent = <<<EOL
-<?php
-// Configurações de deploy
-\$config = [
-    'repo_url' => '$repoUrl',
-    'webhook_secret' => '$webhookSecret',
-    'target_dir' => '$targetDir',
-    'temp_dir' => '$tempDir',
-    'log_file' => '$logFile',
-];
-EOL;
+        // aqui crio o arquivo de configurações
+        $configContent = <<<EOL
+    <?php
+    // Configurações de deploy
+    \$config = [
+        'repo_url' => '$repoUrl',
+        'webhook_secret' => '$webhookSecret',
+        'target_dir' => '$targetDir',
+        'temp_dir' => '$tempDir',
+        'log_file' => '$logFile',
+    ];
+    EOL;
 
-    // caminho do arquivo de configurações
-    $configFile = __DIR__ . '/deploy-config.php';
+        // caminho do arquivo de configurações
+        $configFile = __DIR__ . '/deploy-config.php';
 
-    // salvar as configurações no arquivo
-    if (file_put_contents($configFile, $configContent)) {
-        echo '<h2>Configuração salva com sucesso!</h2> <br> <h4>Verifique o arquivo <code>deploy-config.php</code> na raiz do projeto.</h4>
-        
-        <input type="hidden" id="webhook_secret" name="webhook_secret" value="' . $webhookSecret . '">
-        
-        <h4>Webhook Secret: <span id="secret" style="color: green; cursor:pointer;" title="Copiar Secret" onclick="copySecretValue()">' . htmlspecialchars($webhookSecret) . '</span></h4><br>
-        
-        <div>
-            <button type="button" onclick="ToastDeployView(), deployNow()" class="btn btn-primary"><a>Deploy agora</a></button>
-            <button type="button" onclick="copyUrl()" class="btn btn-secondary" ><a>Copiar Payload URL</a></button>
-        </div>';
-        
+        // salvar as configurações no arquivo
+        if (file_put_contents($configFile, $configContent)) {
+            echo '<h2>Configuração salva com sucesso!</h2> <br> <h4>Verifique o arquivo <code>deploy-config.php</code> na raiz do projeto.</h4>
+            
+            <input type="hidden" id="webhook_secret" name="webhook_secret" value="' . $webhookSecret . '">
+            
+            <h4>Webhook Secret: <span id="secret" class="copy-secret" onclick="copySecretValue()">' . htmlspecialchars($webhookSecret) . '</span></h4><br>
+            
+            <div>
+                <button type="button" onclick="ToastDeployView(), deployNow()" class="btn btn-primary"><a>Deploy agora</a></button>
+                <button type="button" onclick="copyUrl()" class="btn btn-secondary" ><a>Copiar Payload URL</a></button>
+            </div>';
+            
+        } else {
+            echo "Erro ao salvar a configuração.";
+        }
     } else {
-        echo "Erro ao salvar a configuração.";
+        // gerar um webhook_secret randômico
+        $randomSecret = bin2hex(random_bytes(16));
+        
+        // formulário de configurações
+        echo '<form method="POST" action="">
+            <h2>Configurações</h2>
+            <label for="repo_url" class="form-label">URL do Repositório:</label><br>
+            <input type="text" class="form-control" id="repo_url" name="repo_url" required>
+            
+            <input type="hidden" id="webhook_secret" name="webhook_secret" value="' . $randomSecret . '"><br>
+            <span id="secret" style="color: grey;">' . htmlspecialchars($randomSecret) . '</span>
+            <label for="webhook_secret" class="form-label">Webhook Secret gerada randomicamente! Clique em <b>Salvar Configuração</b>, copie e cole nas configurações do seu repositório.</label>
+            <br>
+            
+            <input type="submit" class="btn btn-primary" value="Salvar Configuração"> 
+        </form>';
     }
-} else {
-    // gerar um webhook_secret randômico
-    $randomSecret = bin2hex(random_bytes(16));
-    
-    // formulário de configurações
-    echo '<form method="POST" action="">
-        <label for="repo_url" class="form-label">URL do Repositório:</label><br>
-        <input type="text" class="form-control" id="repo_url" name="repo_url" required>
-        
-        <input type="hidden" id="webhook_secret" name="webhook_secret" value="' . $randomSecret . '"><br>
-        <label for="webhook_secret" class="form-label">Webhook Secret gerada:</label><br>
-        <span id="secret" style="color: grey;">' . htmlspecialchars($randomSecret) . '</span><br><br>
-        
-        <input type="submit" class="btn btn-primary" value="Salvar Configuração"> 
-    </form>';
-}
-?>
-
-
-    </div>
-    <div>
-    <img src="/assets-zip/final-bg.png" id="bg-right" alt="">
-    </div>
+    ?>
+        </div>
+        <div>
+            <img src="/assets-zip/final-bg.png" class="img-fluid" id="bg-right" alt="">
+        </div>
     </section>
-    <div class="box tuto">
-    <h4>Configurar o webhook no GitHub</h4>
-    <p>Vá até o seu repositório, clique "Settings", depois em "Webhooks", crie um novo Webhook, e configure como na imagem abaixo:</p>
-    <img src="/assets-zip/webhookgit.png" class="img-fluid" alt="">
+    <div class="container tuto">
+        <div class="container">
+            <h4>Configurar o webhook no GitHub</h4>
+            <p>Vá até o seu repositório, clique "Settings", depois em "Webhooks", crie um novo Webhook, e configure como na imagem abaixo:</p>
+    
+            <img src="/assets-zip/webhookgit.png" class="img-fluid" alt="">
+        </div>
     </div>
     </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
