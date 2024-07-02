@@ -66,7 +66,7 @@
 
         // definir valores padrão para os parâmetros removidos
         $tempDir = __DIR__  . '/temp_clone';
-        $logFile = __DIR__  . '/logs-zip/deploy.log';
+        $logFile = __DIR__  . '/deploy-logs/deploy.log';
 
         // aqui crio o arquivo de configurações
         $configContent = <<<EOL
