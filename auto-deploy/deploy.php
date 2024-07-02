@@ -72,7 +72,7 @@ logMessage('Iniciando o deploy');
 // Verifica se o evento é um push
 if ($githubEvent == 'push') {
     // Executa o script shell de deploy
-    $output = shell_exec("bash $deployScriptShell 2>&1");
+    $output = shell_exec("bash " . escapeshellarg($deployScriptShell) . " 2>&1");
     
     // Log da execução do deploy
     file_put_contents($logFile, "[" . date('Y-m-d H:i:s') . "] Resultado do deploy:\n$output\n\n", FILE_APPEND);
