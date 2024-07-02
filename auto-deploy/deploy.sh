@@ -51,6 +51,10 @@ if [ -d "$TARGET_DIR" ]; then
     done
 fi
 
+#removendo diretorio oculto 
+rm -rf ".git"
+echo "Removendo diretório oculto .git"
+
 # Clona o repositório em um diretório temporário
 echo "Clonando o repositório: $GIT_REPO"
 git clone "$GIT_REPO" "$TEMP_DIR"
@@ -73,7 +77,7 @@ rm -rf "$TEMP_DIR"
 
 #removendo lockfile
 
-rm -rf $LOCKFILE
+rm -rf "$LOCKFILE"
 echo "Lockfile removido com sucesso!"
 
 echo "Deploy concluído com sucesso!"
