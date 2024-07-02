@@ -20,7 +20,7 @@ TEMP_DIR="$temp_dir"
 
 # Lista de exceções - arquivos e diretórios que não devem ser removidos ou sobrepostos
 EXCEPTION_ITEMS=(
-    "logs-zip"
+    "deploy-logs"
     "auto-deploy" 
     "deploy-config.php"
     ".env"
