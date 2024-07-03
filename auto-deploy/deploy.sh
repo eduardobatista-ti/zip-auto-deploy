@@ -24,6 +24,7 @@ EXCEPTION_ITEMS=(
     "auto-deploy" 
     "deploy-config.php"
     ".env"
+    "deploy.lock"
 )
 
 # Função para checar se um item está na lista de exceções
