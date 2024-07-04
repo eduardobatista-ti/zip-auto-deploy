@@ -55,7 +55,7 @@
     </div>
     <main>
         <section class="container flex-right global" id="section-1">
-        <div id="config-setup">
+        <div id="config">
             
             <?php
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -121,7 +121,7 @@
     ?>
         </div>
         <div>
-            <img src="/assets-zip/final-bg.png" class="img-fluid" id="bg-right" alt="">
+            <img src="/assets-zip/final-bg.png" class="img-fluid" id="img-right" alt="">
         </div>
     </section>
     <div class="container tuto">
